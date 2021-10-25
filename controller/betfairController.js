@@ -27,14 +27,6 @@ const redisClient = redis.createClient({
     db: 2
 })
 
-const inplayredisClient = redis.createClient({
-    host: rdsconfig.host,
-    auth_pass: rdsconfig.auth_pass,
-    port: rdsconfig.port,
-    db: 3
-})
-
-
 var Fancylimits = {}
 run()
 async function run() {
@@ -473,24 +465,6 @@ exports.playergetmarketslist = async (req, res, next) => {
         if (rq.eventType === "000") {
             
             let items = [];
-            // inplayredisClient.keys("*", async (err, keys) => {
-            //     inplayredisClient.mget(keys, async function (err, values) {
-            //         if (values) {
-            //             for (let i in values) {
-            //                 let item = JSON.parse(values[i]);
-            //                 items.push(item)
-            //             }
-            //             res.send({
-            //                 status: true,
-            //                 data: items
-            //             })
-            //             return next()
-            //         } else {
-            //             res.send({ status: false, })
-            //         return next()
-            //         }
-            //     })
-            //  })
             redisClient.keys("*", async (err, keys) => {
                 redisClient.mget(keys, async function (err, values) {
                     if (values) {
@@ -4540,29 +4514,14 @@ async function Realtimesportlist() {
                 }
             })
         }
-        // const inplayitems = await getSerlist(sport_id, true, sportslist[i], limits)
-        // if (inplayitems.length) {
-        //     await ischeckOldmatch(items)
-        //     inplayrows.push({
-        //         key,
-        //         data: {
-        //             Serlist: inplayitems,
-        //             sport: sportslist[i]
-        //         }
-        //     })
-        // }
+      
     }
     redisClient.flushdb((err, result) => {
     })
-    inplayredisClient.flushdb(  (err, result) => {  
-    })
+    
 
     for (let i in rows) {
         redisClient.set(rows[i].key, JSON.stringify(rows[i].data))
-    }
-
-    for (let i in inplayrows) {
-        inplayredisClient.set(inplayrows[i].key, JSON.stringify(inplayrows[i].data))
     }
     console.log("--Realtimesportlist--")
     return "ok"
