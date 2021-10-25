@@ -24,14 +24,14 @@ const redisClient = redis.createClient({
     host: rdsconfig.host,
     auth_pass: rdsconfig.auth_pass,
     port: rdsconfig.port,
-    db: 1
+    db: 2
 })
 
 const inplayredisClient = redis.createClient({
     host: rdsconfig.host,
     auth_pass: rdsconfig.auth_pass,
     port: rdsconfig.port,
-    db: 2
+    db: 3
 })
 
 
